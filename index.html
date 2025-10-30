@@ -8,11 +8,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    /* Reset e Estilos Base (Equivalente ao Tailwind Base e index.css) */
     :root {
       --tiktokRed: #FE2C55;
     }
 
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -23,10 +24,9 @@
       background-color: #f5f5f5;
       color: #000;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
     }
 
+    /* Animação de Pulsação */
     @keyframes pulse-slow {
       0%, 100% {
         opacity: 1;
@@ -42,13 +42,25 @@
       animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
 
-    .hidden { display: none !important; }
-
+    /* Estrutura Principal */
     .app-container {
-      flex: 1;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
+    }
+
+    .content-wrapper {
+      flex-grow: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Utilitários */
+    .hidden {
+      display: none !important;
     }
 
     /* Header */
@@ -56,44 +68,45 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 1rem;
-      margin-top: 1rem;
+      margin-top: 2.5rem;
+      margin-bottom: 2.5rem;
     }
     .header img {
-      width: 10rem;
-      height: 10rem;
+      width: 12rem;
+      height: 12rem;
       object-fit: contain;
     }
 
-    /* Primeira Tela - Justa e Centralizada */
+    /* Botão de Revelar Conteúdo */
     .reveal-container {
-      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 1rem;
+      padding: 1.5rem;
       width: 100%;
-      padding: 1rem;
-      text-align: center;
+      min-height: calc(100vh - 150px);
     }
     .reveal-button {
       background-color: var(--tiktokRed);
       color: white;
       font-weight: 700;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
+      text-align: center;
       border-radius: 0.75rem;
       width: 100%;
-      max-width: 22rem;
-      padding: 1.25rem 1rem;
+      max-width: 24rem;
+      padding: 1.5rem 1rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
       border: none;
       cursor: pointer;
-      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
+      transition: transform 0.2s;
     }
-    .reveal-button:hover { transform: scale(1.05); }
+    .reveal-button:hover {
+      transform: scale(1.05);
+    }
 
-    /* Conteúdo Principal */
+    /* Conteúdo Principal (Após o clique) */
     .main-content {
       display: flex;
       flex-direction: column;
@@ -101,29 +114,33 @@
       padding: 1rem;
       width: 100%;
       max-width: 36rem;
-      margin: 0 auto;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    /* Video */
+    /* Video Frame */
     .video-frame {
       width: 100%;
       max-width: 24rem;
+      margin: 0 auto;
       background-color: black;
       border-radius: 0.75rem;
       overflow: hidden;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      cursor: pointer;
       position: relative;
       margin-bottom: 1.5rem;
-      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-      cursor: pointer;
     }
     .video-aspect-ratio {
       position: relative;
-      padding-top: 177.77%;
+      padding-top: 177.77%; /* Proporção 9:16 */
     }
     .video-element {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
     }
     .video-overlay {
@@ -132,7 +149,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: rgba(0,0,0,0.3);
+      background-color: rgba(0, 0, 0, 0.3);
       transition: opacity 0.3s;
     }
     .video-overlay svg {
@@ -143,14 +160,17 @@
     }
     .video-mute-toggle {
       position: absolute;
-      top: 1rem; right: 1rem;
+      top: 1rem;
+      right: 1rem;
       padding: 0.5rem;
       border-radius: 9999px;
-      background-color: rgba(0,0,0,0.5);
+      background-color: rgba(0, 0, 0, 0.5);
       color: white;
+      transition: opacity 0.3s;
     }
     .video-mute-toggle svg {
-      width: 1.25rem; height: 1.25rem;
+      width: 1.25rem;
+      height: 1.25rem;
     }
 
     /* Gift Card */
@@ -159,52 +179,58 @@
       border-radius: 0.75rem;
       padding: 1.5rem;
       text-align: center;
+      transition: all 0.3s;
+      position: relative;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
       width: 100%;
       max-width: 24rem;
-      margin-bottom: 1.5rem;
+      margin: 0 auto;
       border: 2px solid #f3f4f6;
-      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
     }
     .gift-card img.gift-image {
       object-fit: contain;
+      margin: 0 auto;
       width: 6rem;
       height: 6rem;
       margin-bottom: 1rem;
     }
     .gift-name {
-      font-weight: 600;
+      font-weight: 500;
       font-size: 1.25rem;
       margin-bottom: 0.75rem;
+      color: #111827;
     }
     .price-container {
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 0.25rem;
       margin-bottom: 1rem;
     }
     .original-price {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
       font-size: 0.875rem;
       color: #9ca3af;
       text-decoration: line-through;
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
     }
     .sale-price {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
       font-size: 1.5rem;
       font-weight: 800;
       color: var(--tiktokRed);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
     }
     .coin-icon {
       object-fit: contain;
     }
     .original-price .coin-icon { width: 0.75rem; height: 0.75rem; }
     .sale-price .coin-icon { width: 1.25rem; height: 1.25rem; }
-
     .send-button {
       background-color: var(--tiktokRed);
       color: white;
@@ -213,30 +239,32 @@
       border-radius: 0.5rem;
       width: 100%;
       padding: 0.75rem 0;
+      margin-top: 1rem;
       font-size: 1rem;
       cursor: pointer;
       transition: background-color 0.2s;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
     .send-button:hover {
       background-color: #ff4466;
     }
 
-    /* Quantidade */
+    /* Quantity Selector */
     .quantity-selector {
       width: 100%;
-      max-width: 24rem;
+      margin-top: 1.5rem;
+      padding: 1rem;
       background-color: white;
       border-radius: 0.75rem;
-      padding: 1rem;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      text-align: center;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      max-width: 24rem;
     }
     .quantity-selector h3 {
       font-size: 0.875rem;
       font-weight: 600;
       color: #374151;
       margin-bottom: 0.75rem;
+      text-align: center;
     }
     .quantity-buttons {
       display: flex;
@@ -247,79 +275,99 @@
     .quantity-button {
       padding: 0.5rem 1rem;
       font-size: 0.875rem;
+      font-weight: 500;
       border-radius: 9999px;
+      transition: all 0.2s;
       border: 2px solid #e5e7eb;
       background-color: #f3f4f6;
+      color: #374151;
       cursor: pointer;
-      transition: all 0.2s;
     }
-    .quantity-button:hover { background-color: #e5e7eb; }
+    .quantity-button:hover {
+      background-color: #e5e7eb;
+    }
     .quantity-button.active {
       background-color: var(--tiktokRed);
       color: white;
       border-color: var(--tiktokRed);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
 
+    /* Footer */
     .footer {
+      margin-top: 1.5rem;
       font-size: 0.75rem;
       color: #6b7281;
       text-align: center;
-      margin-top: 1.5rem;
       padding-bottom: 1.25rem;
     }
   </style>
 </head>
 <body>
+
   <div class="app-container">
     <header class="header">
-      <img src="https://logodownload.org/wp-content/uploads/2019/08/tiktok-logo-9.png" alt="TikTok Logo">
+      <img src="https://logodownload.org/wp-content/uploads/2019/08/tiktok-logo-9.png" alt="TikTok Logo" />
     </header>
 
-    <main id="revealContainer" class="reveal-container">
-      <button id="revealButton" class="reveal-button animate-pulse-slow">
-        Clique aqui para descobrir como ganhar R$2 mil no pix agora mesmo
-      </button>
-    </main>
+    <div class="content-wrapper">
+      <!-- 1. Tela Inicial com Botão -->
+      <main id="revealContainer" class="reveal-container">
+        <button id="revealButton" class="reveal-button animate-pulse-slow">
+          Clique aqui para descobrir como ganhar R$2 mil no pix agora mesmo
+        </button>
+      </main>
 
-    <main id="mainContent" class="main-content hidden">
-      <div id="videoFrame" class="video-frame">
-        <div class="video-aspect-ratio">
-          <video id="videoPlayer" class="video-element" src="https://i.imgur.com/NFI9dE9.mp4" loop playsinline preload="auto"></video>
-        </div>
-        <div id="videoOverlay" class="video-overlay">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-        </div>
-        <div id="muteToggle" class="video-mute-toggle"></div>
-      </div>
-
-      <div class="gift-card">
-        <img src="https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/resource/79a02148079526539f7599150da9fd28.png~tplv-obj.webp" alt="Galáxia" class="gift-image" />
-        <div class="gift-name">Galáxia</div>
-        <div class="price-container">
-          <div class="original-price">
-            <img src="https://app.streamtoearn.io/assets/images/coin.png" alt="Moeda" class="coin-icon" />
-            <span id="originalPrice">1000 Moedas</span>
+      <!-- 2. Conteúdo Principal (Inicialmente Oculto) -->
+      <main id="mainContent" class="main-content hidden">
+        
+        <!-- Video -->
+        <div id="videoFrame" class="video-frame">
+          <div class="video-aspect-ratio">
+            <video id="videoPlayer" class="video-element" src="https://i.imgur.com/NFI9dE9.mp4" loop playsinline preload="auto"></video>
           </div>
-          <div class="sale-price">
-            <img src="https://app.streamtoearn.io/assets/images/coin.png" alt="Moeda" class="coin-icon" />
-            <span id="salePrice">500 Moedas</span>
+          <div id="videoOverlay" class="video-overlay">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          </div>
+          <div id="muteToggle" class="video-mute-toggle">
+            <!-- O ícone de som será inserido via JS -->
           </div>
         </div>
-        <button id="sendButton" class="send-button">Enviar 1 Presente(s)</button>
-      </div>
 
-      <div class="quantity-selector">
-        <h3>Deseja enviar quantos presentes?</h3>
-        <div class="quantity-buttons">
-          <button class="quantity-button" data-quantity="1">1</button>
-          <button class="quantity-button" data-quantity="2">2</button>
-          <button class="quantity-button" data-quantity="3">3</button>
-          <button class="quantity-button" data-quantity="5">5</button>
-          <button class="quantity-button" data-quantity="10">10</button>
-          <button class="quantity-button" data-quantity="20">20</button>
+        <!-- Gift Card -->
+        <div class="gift-card">
+          <img src="https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/resource/79a02148079526539f7599150da9fd28.png~tplv-obj.webp" alt="Galáxia" class="gift-image" />
+          <div class="gift-name">Galáxia</div>
+          <div class="price-container">
+            <div class="original-price">
+              <img src="https://app.streamtoearn.io/assets/images/coin.png" alt="Moeda" class="coin-icon" />
+              <span id="originalPrice">1000 Moedas</span>
+            </div>
+            <div class="sale-price">
+              <img src="https://app.streamtoearn.io/assets/images/coin.png" alt="Moeda" class="coin-icon" />
+              <span id="salePrice">500 Moedas</span>
+            </div>
+          </div>
+          <button id="sendButton" class="send-button">
+            Enviar 1 Presente(s)
+          </button>
         </div>
-      </div>
-    </main>
+
+        <!-- Seletor de Quantidade -->
+        <div class="quantity-selector">
+          <h3>Deseja enviar quantos presentes?</h3>
+          <div class="quantity-buttons">
+            <button class="quantity-button" data-quantity="1">1</button>
+            <button class="quantity-button" data-quantity="2">2</button>
+            <button class="quantity-button" data-quantity="3">3</button>
+            <button class="quantity-button" data-quantity="5">5</button>
+            <button class="quantity-button" data-quantity="10">10</button>
+            <button class="quantity-button" data-quantity="20">20</button>
+          </div>
+        </div>
+
+      </main>
+    </div>
 
     <footer class="footer">
       © 2025 TIKTOK PRESENTES | TODOS OS DIREITOS RESERVADOS
@@ -328,7 +376,12 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const BASE_GIFT = { price: 500, originalPrice: 1000 };
+      // --- DADOS DA APLICAÇÃO ---
+      const BASE_GIFT = {
+        price: 500,
+        originalPrice: 1000,
+      };
+
       const GIFT_LINKS = {
         1: "https://go.ironpayapp.com.br/oibjz0dmmh",
         2: "https://go.ironpayapp.com.br/cixhq",
@@ -337,48 +390,65 @@
         5: "https://go.ironpayapp.com.br/nhshj",
         6: "https://go.ironpayapp.com.br/eeamc",
       };
-      const QUANTITY_TO_LINK_ID = { 1: 1, 2: 2, 3: 2, 5: 3, 10: 4, 20: 5 };
+
+      const QUANTITY_TO_LINK_ID = {
+        1: 1, 2: 2, 3: 2, 5: 3, 10: 4, 20: 5,
+      };
+      
       const SVG_ICON = {
-        play: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>',
-        volumeOn: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>',
-        volumeOff: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>',
+        play: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>',
+        volumeOn: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>',
+        volumeOff: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>',
       };
 
+      // --- ESTADO DA APLICAÇÃO ---
       let selectedQuantity = 1;
       let isMuted = false;
 
+      // --- SELETORES DE ELEMENTOS DOM ---
       const revealButton = document.getElementById('revealButton');
       const revealContainer = document.getElementById('revealContainer');
       const mainContent = document.getElementById('mainContent');
+      
       const videoPlayer = document.getElementById('videoPlayer');
       const videoFrame = document.getElementById('videoFrame');
       const videoOverlay = document.getElementById('videoOverlay');
       const muteToggle = document.getElementById('muteToggle');
+
       const originalPriceEl = document.getElementById('originalPrice');
       const salePriceEl = document.getElementById('salePrice');
       const sendButton = document.getElementById('sendButton');
       const quantityButtons = document.querySelectorAll('.quantity-button');
 
+      // --- FUNÇÕES ---
       function updateGiftCard() {
         const totalCoins = BASE_GIFT.price * selectedQuantity;
         const totalOriginalCoins = BASE_GIFT.originalPrice * selectedQuantity;
+
         originalPriceEl.textContent = `${totalOriginalCoins} Moedas`;
         salePriceEl.textContent = `${totalCoins} Moedas`;
         sendButton.textContent = `Enviar ${selectedQuantity} Presente(s)`;
+
         quantityButtons.forEach(btn => {
-          btn.classList.toggle('active', parseInt(btn.dataset.quantity) === selectedQuantity);
+          if (parseInt(btn.dataset.quantity) === selectedQuantity) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
         });
       }
-
+      
       function updateMuteIcon() {
-        muteToggle.innerHTML = isMuted ? SVG_ICON.volumeOff : SVG_ICON.volumeOn;
+          muteToggle.innerHTML = isMuted ? SVG_ICON.volumeOff : SVG_ICON.volumeOn;
       }
 
+      // --- EVENT LISTENERS ---
       revealButton.addEventListener('click', () => {
         revealContainer.classList.add('hidden');
         mainContent.classList.remove('hidden');
         videoPlayer.muted = isMuted;
-        videoPlayer.play().catch(() => {
+        videoPlayer.play().catch(error => {
+          console.warn("Autoplay bloqueado:", error);
           videoOverlay.classList.remove('hidden');
         });
       });
@@ -392,27 +462,42 @@
 
       sendButton.addEventListener('click', () => {
         const linkId = QUANTITY_TO_LINK_ID[selectedQuantity] || 1;
-        const link = GIFT_LINKS[linkId];
-        if (link) window.location.href = link;
+        const redirectionLink = GIFT_LINKS[linkId];
+        if (redirectionLink) {
+          window.location.href = redirectionLink;
+        }
       });
-
+      
+      // Controles do Vídeo
       videoFrame.addEventListener('click', () => {
-        videoPlayer.paused ? videoPlayer.play() : videoPlayer.pause();
+          if (videoPlayer.paused) {
+              videoPlayer.play();
+          } else {
+              videoPlayer.pause();
+          }
+      });
+      
+      muteToggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          isMuted = !isMuted;
+          videoPlayer.muted = isMuted;
+          updateMuteIcon();
+      });
+      
+      videoPlayer.addEventListener('play', () => {
+          videoOverlay.classList.add('hidden');
+      });
+      
+      videoPlayer.addEventListener('pause', () => {
+          videoOverlay.classList.remove('hidden');
       });
 
-      muteToggle.addEventListener('click', e => {
-        e.stopPropagation();
-        isMuted = !isMuted;
-        videoPlayer.muted = isMuted;
-        updateMuteIcon();
-      });
-
-      videoPlayer.addEventListener('play', () => videoOverlay.classList.add('hidden'));
-      videoPlayer.addEventListener('pause', () => videoOverlay.classList.remove('hidden'));
-
+      // --- INICIALIZAÇÃO ---
       updateGiftCard();
       updateMuteIcon();
+      videoOverlay.innerHTML = SVG_ICON.play;
     });
   </script>
+
 </body>
 </html>
